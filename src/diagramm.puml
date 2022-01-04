@@ -1,0 +1,153 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+
+
+abstract class Well{
+    # Pit pit
+    +double getLiquid(double amount)
+    Well(Pit pit)
+}
+
+class Pit{
+        +Pit(double liquidAmount)
+
+        - double liquidAmount;
+        + double getLiquidAmount()
+        + void setLiquidAmount(double la)
+}
+Pit --+ Well
+
+class WaterWell extends Well{
+    +WaterWell(Pit pit)
+
+    +String toString()
+    +int hashCode()
+    +boolean equals()
+}
+
+class MarmeladeWell extends Well{
+    +MarmeladeWell(Pit pit)
+
+    +String toString()
+    +int hashCode()
+    +boolean equals()
+}
+
+abstract class AliveCreature {
+    #String name
+    AliveCreature(String name)
+    + String getName()
+}
+
+abstract class IntelligentCreature extends AliveCreature  implements Conversationable {
+    IntelligentCreature(String name)
+
+     # Conversation conversation
+     +public Conversation getConversation
+     +void setConversation(Conversation conversation)
+     +Conversation getConversation()
+}
+
+
+class Conversation{
+    -Set<Conversationable> interlocutors
+    +Conversation(Conversationable... interlocutors)
+    +void say(Conversationable teller, String message, Emotion emotion)
++void say(Conversationable teller, String message)
+    +void addMember(Conversationable member)
+    +void removeMember(Conversationable member)
+    +String toString()
+    +int hashCode()
+    +boolean equals(Object o)
+}
+
+class MagicHat extends IntelligentCreature {
+    +MagicHat(String name)
+
+    +String toString()
+    +int hashCode()
+    +boolean equals()
+}
+
+class Human extends IntelligentCreature implements MentalHealthable {
+    #Emotion emotion
+    # MentalHealth mentalHealth
+    +Human(String name, MentalHealth mentalHealth)
+    +void yawn()
+    +void rubEyes()
+    +void setEmotion(Emotion em)
+
+    +String toString()
+    +int hashCode()
+    +boolean equals()
+}
+
+
+enum Emotion {
+    DAZED,
+    GLAD,
+    CURIOUS,
+    AFRAID,
+    ANXIOUS,
+    FEARFUL,
+    WORRIED,
+    AMAZED,
+    NORMAL
+}
+
+class MentalHealth{
+    #Emotion emotion;
+    +void setEmotion(Emotion emotion)
+    +Emotion getEmotion()
+    +void reactToSpeech(Emotion emotion)
+
+    +String toString()
+    +int hashCode()
+    +boolean equals(Object o)
+}
+
+MentalHealth <-- Conversation
+
+
+interface Conversationable{
+    +Conversation getConversation();
+    +void setConversation(Conversation conversation);
+    +String getName();
+}
+Conversationable -- Conversation
+
+interface MentalHealthable{
+    +MentalHealth getMentalHealth()
+}
+MentalHealth -- MentalHealthable
+Human -* MentalHealth
+
+class Narrator{
+    -Narrator()
+    {static} + void tell(String message)
+}
+
+class Heart{
+    +hurt()
+}
+Heart --+ Human
+
+package Exceptions{
+    class NegativeAmountOfLiqidInPitException extends Exception{
+        +NegativeAmountOfLiqidInPitException(String message, Object object)
+    }
+
+    class OnlyOnePersonInConversationException extends RuntimeException{
+        +OnlyOnePersonInConversationException(String message)
+    }
+}
+
+class RuntimeException extends Exception
+
+MentalHealth --* Emotion
+
+hide enum empty methods
+
+
+@enduml
